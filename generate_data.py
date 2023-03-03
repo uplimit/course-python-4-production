@@ -2,7 +2,7 @@ import json
 import random
 from tqdm import tqdm
 
-from utils import make_dir, human_readable
+from global_utils import make_dir, human_readable
 from datetime import timedelta, datetime
 import os
 import inspect
@@ -273,11 +273,11 @@ def bg():
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description="Choose from ")
+    parser = argparse.ArgumentParser(description="Choose from one of these : [tst|sml|bg]")
     parser.add_argument('--type',
                         default='tst',
                         choices=['tst', 'sml', 'bg'],
-                        help='Kind of data to generate')
+                        help='Type of data to generate')
     args = parser.parse_args()
 
     if args.type == 'tst':

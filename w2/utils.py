@@ -1,11 +1,5 @@
 from typing import Dict
 import numpy as np
-from typing import Generator
-import os
-import constants
-import matplotlib.pyplot as plt
-
-CURRENT_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
 
 class Stats:
@@ -83,45 +77,3 @@ class Stats:
         self._vals.append(val)
         self.update_min(val=val)
         self.update_max(val=val)
-
-
-class DataReader:
-    def __init__(self, fp, sep, col_names) -> None:
-        self._fp = fp
-        self._sep = sep
-        self._col_names = col_names
-
-    def __iter__(self) -> Generator:
-        """
-        Input : None
-        Output : Generator
-
-        This method should return an iterable generator. Upon iteration the data should be of type Dict
-        For example if the file format is as below:
-
-        StockCode    , Description    , UnitPrice  , Quantity, TotalPrice , Country
-        22180        , RETROSPOT LAMP , 19.96      , 4       , 79.84      , Russia
-        23017        , APOTHECARY JAR , 24.96      , 1       , 24.96      , Germany
-
-        The generator function should return the rows in the below format:
-        {
-            'StockCode': '22180',
-            'Description': 'RETROSPOT LAMP',
-            'UnitPrice': 19.96,
-            'Quantity': 4,
-            'TotalPrice': 79.84,
-            'Country': 'Russia',
-        }
-        """
-        for n_row, row in enumerate(open(self._fp, "r")):
-            row_vals = row.strip('\n').split(self._sep)
-            row_vals = {key: value for key, value in zip(self._col_names, row_vals)}
-            row_vals['n_row'] = n_row
-            yield row_vals
-
-    def get_file_path(self):
-        return self._fp
-
-    def get_column_names(self):
-        return self._col_names
-

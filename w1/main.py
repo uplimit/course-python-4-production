@@ -1,118 +1,21 @@
-from typing import List, Dict, Generator
+import constants
+from w1.data_processor import DataProcessor
 from pprint import pprint
-from utils import Stats, DataReader
+from typing import Dict
 from tqdm import tqdm
 import os
+import argparse
+from global_utils import get_file_name, make_dir, plot_sales_data
+from datetime import datetime
+import json
 
 
-class Koala:
-    def __init__(self, file_path: str) -> None:
-        self._fp = file_path
-        self._col_names = []
-        self._sep = ","
-        self._stats = None
-
-        self._set_col_names()
-
-        self.data_reader = DataReader(fp=file_path, sep=self._sep, col_names=self._col_names)
-
-    @staticmethod
-    def to_float(val):
-        try:
-            return float(val)
-        except:
-            return None
-
-    def _set_col_names(self) -> None:
-        with open(self._fp) as f:
-            first_row = f.readline().strip('\n')
-
-        col_names = first_row.split(self._sep)
-        self._col_names = col_names
-
-    # def file_reader(self) -> Generator:
-    #     """
-    #     Input : None
-    #     Output : Generator
-    #
-    #     This method should return an iterable generator. Upon iteration the data should be of type Dict
-    #     For example if the file format is as below:
-    #
-    #     StockCode    , Description    , UnitPrice  , Quantity, TotalPrice , Country
-    #     22180        , RETROSPOT LAMP , 19.96      , 4       , 79.84      , Russia
-    #     23017        , APOTHECARY JAR , 24.96      , 1       , 24.96      , Germany
-    #
-    #     The generator function should return the rows in the below format:
-    #     {
-    #         'StockCode': '22180',
-    #         'Description': 'RETROSPOT LAMP',
-    #         'UnitPrice': 19.96,
-    #         'Quantity': 4,
-    #         'TotalPrice': 79.84,
-    #         'Country': 'Russia',
-    #     }
-    #     """
-    #     for n_row, row in enumerate(open(self._fp, "r")):
-    #         row_vals = row.strip('\n').split(self._sep)
-    #         row_vals = {key:value for key,value in zip(self._col_names, row_vals)}
-    #         row_vals['n_row'] = n_row
-    #         yield row_vals
-
-    def describe(self, column_names: List[str]):
-        # get generator from data_reader
-        data_reader_gen = (row for row in self.data_reader)
-
-        # skip first row as it is the column name
-        _ = next(data_reader_gen)
-
-        # key is the column name and value is the stats object
-        stats = {name: Stats() for name in column_names}
-
-        # update stats as we iterate through the file
-        for row in tqdm(data_reader_gen):
-            for column_name in column_names:
-                stats[column_name].update_stats(val=row[column_name])
-
-        self._stats = stats
-        for column_name, value in self._stats.items():
-            pprint(column_name)
-            pprint(value.get_stats())
-
-    def aggregate(self, column_name: str) -> float:
-        """
-        Input : List[str]
-        Output : Dict
-
-        This method should use the generator function (`file_reader`) created above and return aggregate
-        of the column mentioned in the `column_name` variable
-
-        For example if the `column_name` -> 'TotalPrice' and the file format is as below:
-
-        StockCode    , Description    , UnitPrice  , Quantity, TotalPrice , Country
-        22180        , RETROSPOT LAMP , 19.96      , 4       , 79.84      , Russia
-        23017        , APOTHECARY JAR , 24.96      , 1       , 24.96      , Germany
-        84732D       , IVORY CLOCK    , 0.39       , 2       , 0.78       ,India
-
-        aggregate should be 105.58
-        """
-        # get generator from data_reader
-        data_reader_gen = (row for row in self.data_reader)
-
-        # skip first row as it is the column name
-        _ = next(data_reader_gen)
-
-        aggregate = 0
-
-        for row in tqdm(data_reader_gen):
-            if self.to_float(row[column_name]):
-                aggregate += self.to_float(row[column_name])
-
-        return aggregate
+CURRENT_FOLDER_NAME = os.path.dirname(os.path.abspath(__file__))
 
 
-def revenue_per_region(ko: Koala) -> Dict:
+def revenue_per_region(dp: DataProcessor) -> Dict:
     """
-    Input : object of instance type Class Koala
+    Input : object of instance type Class DataProcessor
     Output : Dict
 
     The method should find the aggregate revenue per region
@@ -141,7 +44,7 @@ def revenue_per_region(ko: Koala) -> Dict:
     }
     """
 
-    data_reader = ko.data_reader
+    data_reader = dp.data_reader
     data_reader_gen = (row for row in data_reader)
 
     # skip first row as it is the column name
@@ -150,35 +53,57 @@ def revenue_per_region(ko: Koala) -> Dict:
     aggregate = dict()
 
     for row in tqdm(data_reader_gen):
-        if row['Country'] not in aggregate:
-            aggregate[row['Country']] = 0
-        aggregate[row['Country']] += ko.to_float(row['TotalPrice'])
+        if row[constants.OutDataColNames.COUNTRY] not in aggregate:
+            aggregate[row[constants.OutDataColNames.COUNTRY]] = 0
+        aggregate[row[constants.OutDataColNames.COUNTRY]] += dp.to_float(row[constants.OutDataColNames.TOTAL_PRICE])
 
     return aggregate
 
 
 def get_sales_information(file_path: str) -> Dict:
     # Initialize
-    dp = Koala(file_path=file_path)
+    dp = DataProcessor(file_path=file_path)
 
     # print stats
-    dp.describe(column_names=['UnitPrice', 'TotalPrice'])
+    dp.describe(column_names=[constants.OutDataColNames.UNIT_PRICE, constants.OutDataColNames.TOTAL_PRICE])
 
     # return total revenue and revenue per region
     return {
-        'total_revenue': dp.aggregate(column_name='TotalPrice'),
-        'revenue_per_region': revenue_per_region(dp)
+        'total_revenue': dp.aggregate(column_name=constants.OutDataColNames.TOTAL_PRICE),
+        'revenue_per_region': revenue_per_region(dp),
+        'file_name': get_file_name(file_path)
     }
 
 
 def main():
-    folder_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data')
-    file_paths = [os.path.join(folder_path, file_name) for file_name in ['2015.csv', '2016.csv', '2017.csv',
-                                                                         '2018.csv', '2019.csv', '2020.csv',
-                                                                         '2021.csv']]
-    revenue_data = [get_sales_information(file_path) for file_path in file_paths]
+    parser = argparse.ArgumentParser(description="Choose from one of these : [tst|sml|bg]")
+    parser.add_argument('--type',
+                        default='tst',
+                        choices=['tst', 'sml', 'bg'],
+                        help='Type of data to generate')
+    args = parser.parse_args()
+
+    data_folder_path = os.path.join(CURRENT_FOLDER_NAME, '..', constants.DATA_FOLDER_NAME, args.type)
+    files = [str(file) for file in os.listdir(data_folder_path) if str(file).endswith('csv')]
+
+    output_save_folder = os.path.join(CURRENT_FOLDER_NAME, '..', 'output', args.type,
+                                      datetime.now().strftime("%B %d %Y %H-%M-%S"))
+    make_dir(output_save_folder)
+
+    file_paths = [os.path.join(data_folder_path, file_name) for file_name in files]
+    revenue_data = [get_sales_information(file_path)
+                    for file_path in file_paths]
+
     pprint(revenue_data)
+
+    for yearly_data in revenue_data:
+        with open(os.path.join(output_save_folder, f'{yearly_data["file_name"]}.json'), 'w') as f:
+            f.write(json.dumps(yearly_data))
+
+        plot_sales_data(yearly_revenue=yearly_data['revenue_per_region'], year=yearly_data["file_name"],
+                        plot_save_path=os.path.join(output_save_folder, f'{yearly_data["file_name"]}.png'))
 
 
 if __name__ == '__main__':
     main()
+
