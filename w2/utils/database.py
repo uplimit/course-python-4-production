@@ -74,7 +74,7 @@ class DB:
         cursor = self._connection.execute(f'''SELECT {",".join(self._col_order)}
                                               FROM {self._table_name}''')
         for row in cursor.fetchall():
-            row_dict = {col_name:row[ind] for ind, col_name in enumerate(self._col_order)}
+            row_dict = {col_name: row[ind] for ind, col_name in enumerate(self._col_order)}
             time_taken = self.calculate_time_taken(start_time=row_dict['start_time'], end_time=row_dict['end_time'],
                                                    datetime_fmt='%Y-%m-%d %H:%M:%S')
             row_dict['time_taken'] = time_taken
