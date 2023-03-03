@@ -11,7 +11,7 @@ import argparse
 
 import uuid
 
-CURRENT_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), constants.DATA_FOLDER_NAME)
+CURRENT_FOLDER = os.path.dirname(os.path.abspath(__file__))
 random.seed(42)
 
 
@@ -42,7 +42,8 @@ class DataGenerator:
         return self._seed_data
 
     def read_seed_data(self):
-        with open(os.path.join(CURRENT_FOLDER, constants.SEED_FOLDER_NAME, constants.SEED_FILE_NAME)) as f:
+        with open(os.path.join(CURRENT_FOLDER, constants.DATA_FOLDER_NAME,
+                               constants.SEED_FOLDER_NAME, constants.SEED_FILE_NAME)) as f:
             items = json.loads(f.read())
 
         modified_items = []
@@ -82,7 +83,8 @@ def generate_file(data_gen_obj, file_details):
     total_units = 0
     total_price = 0
 
-    file_path = os.path.join(CURRENT_FOLDER, file_details['folder_name'], file_details['file_name'])
+    file_path = os.path.join(CURRENT_FOLDER, constants.DATA_FOLDER_NAME, file_details['folder_name'],
+                             file_details['file_name'])
     make_dir(directory=os.path.join(CURRENT_FOLDER, file_details['folder_name']))
 
     with open(file_path, 'w') as f:
