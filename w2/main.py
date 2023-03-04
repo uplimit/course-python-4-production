@@ -2,7 +2,7 @@ import datetime
 from typing import List, Tuple, Dict, Generator
 import numpy as np
 from pprint import pprint
-from utils.utils import Stats
+from w1.utils import Stats
 from tqdm import tqdm
 import os
 from utils.database import DB
@@ -71,7 +71,7 @@ class DP(DataProcessor):
                 aggregate += self.to_float(row[column_name])
 
         self._db.update_percentage(process_id=process_id, percentage=100)
-        self._db.update(process_id=process_id, end_time=datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S'))
+        self._db.update_end_time(process_id=process_id, end_time=datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S'))
         return aggregate
 
     def describe(self, column_names: List[str]):
@@ -100,7 +100,7 @@ class DP(DataProcessor):
             pprint(value.get_stats())
 
         self._db.update_percentage(process_id=process_id, percentage=100)
-        self._db.update(process_id=process_id, end_time=datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S'))
+        self._db.update_end_time(process_id=process_id, end_time=datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S'))
 
 
 def revenue_per_region(dp: DP) -> Dict:
@@ -154,7 +154,7 @@ def revenue_per_region(dp: DP) -> Dict:
         aggregate[row['Country']] += dp.to_float(row['TotalPrice'])
 
     dp.get_db().update_percentage(process_id=process_id, percentage=100)
-    dp.get_db().update(process_id=process_id, end_time=datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S'))
+    dp.get_db().update_end_time(process_id=process_id, end_time=datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S'))
 
     return aggregate
 

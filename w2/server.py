@@ -7,6 +7,7 @@ from pydantic import BaseModel
 from starlette.websockets import WebSocket, WebSocketState
 from w2.utils.websocket import ConnectionManager
 from w2.utils.response_model import ProcessStatus
+from w2.utils.database import DB
 
 app = FastAPI()
 manager = ConnectionManager()
@@ -32,9 +33,18 @@ async def websocket_endpoint(websocket: WebSocket):
         print("Client disconnected")
 
 
+# health check API
+@app.get("/health")
+async def get():
+    return {"status": "ok"}
+
+
 # Below endpoint renders an HTML page
 @app.get("/")
 async def get():
+    """
+    should render the HTML file - index.html when a user goes to http://127.0.0.1:8000/
+    """
     with open('index.html', 'r') as f:
         html = f.read()
 
@@ -45,9 +55,15 @@ async def get():
 # Below endpoint to get the initial data
 @app.get("/processes")
 async def get() -> List[ProcessStatus]:
+    """
+    Get all the records from the process table and return it using the pydantic model ProcessStatus
+    """
+    db = DB()
+
+    processes = db.read_all()
+
     return [
-        ProcessStatus(process_id='1', file_name='', file_path='', description='', start_time='',
-                      end_time='', total_time=0),
-        ProcessStatus(process_id='1', file_name='', file_path='', description='', start_time='',
-                      end_time='', total_time=0),
-    ]
+        ProcessStatus(process_id=process['process_id'], file_name=process['file_name'],
+                      file_path=process['file_path'], description=process['description'],
+                      start_time=process['start_time'], end_time=process['end_time'], percentage=process['percentage'])
+        for process in processes]

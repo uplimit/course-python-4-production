@@ -10,4 +10,4 @@ class ProcessStatus(BaseModel):
     description: Union[str, None] = None
     start_time: str
     end_time: Union[str, None] = None
-    total_time: Union[int, None] = None
+    percentage: Union[int, None] = None
