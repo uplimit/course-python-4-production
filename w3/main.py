@@ -29,36 +29,6 @@ class DP(DataProcessor):
 
 
 def revenue_per_region(dp: DP) -> Dict:
-    """
-    Input : object of instance type Class DP
-    Output : Dict
-
-    The method should find the aggregate revenue per region
-
-    For example if the file format is as below:
-
-    StockCode    , Description    , UnitPrice  , Quantity, TotalPrice , Country
-    22180        , RETROSPOT LAMP , 19.96      , 4       , 79.84      , Russia
-    23017        , APOTHECARY JAR , 24.96      , 1       , 24.96      , Germany
-    84732D       , IVORY CLOCK    , 0.39       , 2       , 0.78       ,India
-    ...
-    ...
-    ...
-
-    expected output format is:
-    {
-        'China': 1.66,
-        'France': 17.14,
-        'Germany': 53.699999999999996,
-        'India': 55.78,
-        'Italy': 90.45,
-        'Japan': 76.10000000000001,
-        'Russia': 87.31,
-        'United Kingdom': 29.05,
-        'United States': 121.499
-    }
-    """
-
     data_reader = dp.data_reader
     data_reader_gen = (row for row in data_reader)
 
@@ -91,7 +61,7 @@ def get_sales_information(file_path: str) -> Dict:
 
 
 # batches the files based on the number of processes
-def batch_files(file_paths, n_processes):
+def batch_files(file_paths: List[str], n_processes: int) -> List[set]:
     if n_processes > len(file_paths):
         return []
 
@@ -109,22 +79,22 @@ def batch_files(file_paths, n_processes):
 
 
 # Fetch the revenue data from a file
-def run(file_names, n_process):
+def run(file_names: List[str], n_process: int) -> List[Dict]:
     st = time.time()
 
-    print("Thread : {}".format(n_process))
+    print("Process : {}".format(n_process))
     folder_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data')
     file_paths = [os.path.join(folder_path, file_name) for file_name in file_names]
     revenue_data = [get_sales_information(file_path) for file_path in file_paths]
 
     en = time.time()
 
-    print(f"Batch for thread-{n_process} time taken {en - st}")
+    print(f"Batch for process-{n_process} time taken {en - st}")
     return revenue_data
 
 
-def flatten(l):
-    return [item for sublist in l for item in sublist]
+def flatten(lst: List[List]) -> List:
+    return [item for sublist in lst for item in sublist]
 
 
 def main():
@@ -159,8 +129,8 @@ def main():
 
     with multiprocessing.Pool(processes=n_processes) as pool:
         # Apply the worker function to each argument in the list in parallel
-        revenue_data = pool.starmap(run, [(batch, n_thread) for n_thread, batch in enumerate(batches)])
-        revenue_data = flatten(l=revenue_data)
+        revenue_data = pool.starmap(run, [(batch, n_process) for n_process, batch in enumerate(batches)])
+        revenue_data = flatten(lst=revenue_data)
         # Close the pool and wait for all the tasks to complete
         pool.close()
         pool.join()

@@ -1,6 +1,6 @@
 from typing import Dict
 import numpy as np
-from typing import Generator
+from typing import Generator, List
 import os
 import constants
 import matplotlib.pyplot as plt
@@ -86,7 +86,7 @@ class Stats:
 
 
 class DataReader:
-    def __init__(self, fp, sep, col_names) -> None:
+    def __init__(self, fp: str, sep: str, col_names: List) -> None:
         self._fp = fp
         self._sep = sep
         self._col_names = col_names

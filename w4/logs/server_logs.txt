@@ -1,6 +1,0 @@
-2023-03-06 04:13:46,797 - server_logs - INFO - `/home` API called
-2023-03-06 04:14:36,570 - server_logs - INFO - `/home` API called
-2023-03-06 04:14:50,542 - server_logs - INFO - `/home` API called
-2023-03-06 04:14:50,576 - server_logs - WARNING - Client disconnected
-2023-03-06 04:15:09,563 - server_logs - INFO - `/processes` API called
-2023-03-06 04:20:38,667 - server_logs - INFO - `/processes` API called

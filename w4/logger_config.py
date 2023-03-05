@@ -36,7 +36,6 @@ class Logger:
         self.logger.debug(msg=msg)
 
 
-db_logger = Logger(log_file_name='db_logs.txt', module_name='db_logs')
 server_logger = Logger(log_file_name='server_logs.txt', module_name='server_logs')
 main_logger = Logger(log_file_name='main_logs.txt', module_name='main_logs')
 

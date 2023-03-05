@@ -1,4 +1,4 @@
-from typing import List, Dict, Generator
+from typing import List
 from pprint import pprint
 from w1.utils import Stats, DataReader
 from tqdm import tqdm
@@ -40,34 +40,6 @@ class DataProcessor:
 
         col_names = first_row.split(self._sep)
         self._col_names = col_names
-
-    # def file_reader(self) -> Generator:
-    #     """
-    #     Input : None
-    #     Output : Generator
-    #
-    #     This method should return an iterable generator. Upon iteration the data should be of type Dict
-    #     For example if the file format is as below:
-    #
-    #     StockCode    , Description    , UnitPrice  , Quantity, TotalPrice , Country
-    #     22180        , RETROSPOT LAMP , 19.96      , 4       , 79.84      , Russia
-    #     23017        , APOTHECARY JAR , 24.96      , 1       , 24.96      , Germany
-    #
-    #     The generator function should return the rows in the below format:
-    #     {
-    #         'StockCode': '22180',
-    #         'Description': 'RETROSPOT LAMP',
-    #         'UnitPrice': 19.96,
-    #         'Quantity': 4,
-    #         'TotalPrice': 79.84,
-    #         'Country': 'Russia',
-    #     }
-    #     """
-    #     for n_row, row in enumerate(open(self._fp, "r")):
-    #         row_vals = row.strip('\n').split(self._sep)
-    #         row_vals = {key:value for key,value in zip(self._col_names, row_vals)}
-    #         row_vals['n_row'] = n_row
-    #         yield row_vals
 
     def describe(self, column_names: List[str]):
         # get generator from data_reader

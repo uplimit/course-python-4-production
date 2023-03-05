@@ -22,7 +22,7 @@ class DB:
         self.create_table()
 
     @staticmethod
-    def calculate_time_taken(start_time, end_time, datetime_fmt) -> float:
+    def calculate_time_taken(start_time: str, end_time: str, datetime_fmt: str) -> float:
         if isinstance(start_time, str) and isinstance(end_time, str):
             start_time = datetime.strptime(start_time, datetime_fmt)
             end_time = datetime.strptime(end_time, datetime_fmt)
@@ -52,8 +52,8 @@ class DB:
                   file_path TEXT DEFAULT NULL, description TEXT DEFAULT NULL, 
                   start_time TEXT NOT NULL, end_time TEXT DEFAULT NULL, percentage REAL DEFAULT NULL);''')
 
-    def insert(self, process_id, start_time, file_name=None, file_path=None, description=None, end_time=None,
-               percentage=None) -> None:
+    def insert(self, process_id, start_time, file_name=None, file_path=None,
+               description=None, end_time=None, percentage=None) -> None:
         """
         Insert a record into the table
 

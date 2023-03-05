@@ -5,7 +5,7 @@ from pprint import pprint
 from w1.utils import Stats
 from tqdm import tqdm
 import os
-from utils.database import DB
+from w2.utils.database import DB
 import uuid
 import inspect
 from w1.data_processor import DataProcessor
@@ -149,9 +149,9 @@ def revenue_per_region(dp: DP) -> Dict:
         if isinstance(dp.get_n_rows(), int) and isinstance(n_row, int) and n_row % 10000 == 0:
             dp.get_db().update_percentage(process_id=process_id, percentage=100 * n_row / dp.get_n_rows())
 
-        if row['Country'] not in aggregate:
-            aggregate[row['Country']] = 0
-        aggregate[row['Country']] += dp.to_float(row['TotalPrice'])
+        if row[constants.OutDataColNames.COUNTRY] not in aggregate:
+            aggregate[row[constants.OutDataColNames.COUNTRY]] = 0
+        aggregate[row[constants.OutDataColNames.COUNTRY]] += dp.to_float(row[constants.OutDataColNames.TOTAL_PRICE])
 
     dp.get_db().update_percentage(process_id=process_id, percentage=100)
     dp.get_db().update_end_time(process_id=process_id, end_time=datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S'))
@@ -164,11 +164,11 @@ def get_sales_information(file_path: str) -> Dict:
     dp = DP(file_path=file_path)
 
     # print stats
-    dp.describe(column_names=['UnitPrice', 'TotalPrice'])
+    dp.describe(column_names=[constants.OutDataColNames.UNIT_PRICE, constants.OutDataColNames.TOTAL_PRICE])
 
     # return total revenue and revenue per region
     return {
-        'total_revenue': dp.aggregate(column_name='TotalPrice'),
+        'total_revenue': dp.aggregate(column_name=constants.OutDataColNames.TOTAL_PRICE),
         'revenue_per_region': revenue_per_region(dp),
         'file_name': get_file_name(file_path)
     }

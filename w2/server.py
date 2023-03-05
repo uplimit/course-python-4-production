@@ -35,13 +35,13 @@ async def websocket_endpoint(websocket: WebSocket):
 
 # health check API
 @app.get("/health")
-async def get():
+async def get() -> Dict:
     return {"status": "ok"}
 
 
 # Below endpoint renders an HTML page
 @app.get("/")
-async def get():
+async def get() -> HTMLResponse:
     """
     should render the HTML file - index.html when a user goes to http://127.0.0.1:8000/
     """
