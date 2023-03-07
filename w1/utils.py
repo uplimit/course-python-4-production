@@ -2,8 +2,6 @@ from typing import Dict
 import numpy as np
 from typing import Generator, List
 import os
-import constants
-import matplotlib.pyplot as plt
 
 CURRENT_FOLDER = os.path.dirname(os.path.abspath(__file__))
 

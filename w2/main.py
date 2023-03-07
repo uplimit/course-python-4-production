@@ -1,6 +1,5 @@
 import datetime
-from typing import List, Tuple, Dict, Generator
-import numpy as np
+from typing import List, Dict
 from pprint import pprint
 from w1.utils import Stats
 from tqdm import tqdm

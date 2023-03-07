@@ -7,6 +7,10 @@ CURRENT_FOLDER_NAME = os.path.dirname(os.path.abspath(__file__))
 
 class Logger:
     def __init__(self, log_file_name: str, module_name: str):
+        """
+        :param log_file_name: name of the log file
+        :param module_name: name of the module (can be kept same as the log_file_name without the extension)
+        """
         # Create a custom logger
         self.logger = logging.getLogger(module_name)
         make_dir(directory=os.path.join(CURRENT_FOLDER_NAME, 'logs'))

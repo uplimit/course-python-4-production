@@ -66,7 +66,7 @@ class DataProcessor:
         Input : List[str]
         Output : Dict
 
-        This method should use the generator function (`file_reader`) created above and return aggregate
+        This method should use the generator method assigned to seld.data_reader and return aggregate
         of the column mentioned in the `column_name` variable
 
         For example if the `column_name` -> 'TotalPrice' and the file format is as below:

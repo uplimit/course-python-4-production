@@ -1,7 +1,6 @@
 import os
-from w1.main import revenue_per_region, get_sales_information
+from w1.main import get_sales_information
 from w1.utils import DataReader
-from w1.data_processor import DataProcessor
 import constants
 from global_utils import blockPrint, enablePrint
 from pprint import pprint

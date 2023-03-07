@@ -1,5 +1,5 @@
 import time
-from typing import List, Tuple, Dict, Generator
+from typing import List, Dict
 from tqdm import tqdm
 import os
 import multiprocessing
@@ -97,7 +97,7 @@ def flatten(lst: List[List]) -> List:
     return [item for sublist in lst for item in sublist]
 
 
-def main():
+def main() -> List[Dict]:
     """
     Use the `batch_files` method to create batches of files that needs to be run in each process
     Use the `run` method to fetch revenue data for a given batch of files
@@ -106,6 +106,41 @@ def main():
     Check `multiprocessing.Pool` and `pool.starmap` methods to help you wit the task
 
     At the end check the overall time taken in this code vs the time taken in W1 code
+
+
+    :return: Revenue data in the below format
+
+    [{
+        'total_revenue': float,
+        'revenue_per_region': {
+                                'China': float,
+                                'France': float,
+                                'Germany': float,
+                                'India': float,
+                                'Italy': float,
+                                'Japan': float,
+                                'Russia': float,
+                                'United Kingdom': float,
+                                'United States': float},
+        'file_name': str
+    },{
+        'total_revenue': float,
+        'revenue_per_region': {
+                                'China': float,
+                                'France': float,
+                                'Germany': float,
+                                'India': float,
+                                'Italy': float,
+                                'Japan': float,
+                                'Russia': float,
+                                'United Kingdom': float,
+                                'United States': float},
+        'file_name': str
+    },
+    ....
+    ....
+    ....
+    ]
     """
     st = time.time()
     n_processes = 3

@@ -1,10 +1,7 @@
 
 # import the sqlite3 package
 import sqlite3
-import time
-import uuid
 from datetime import datetime
-from pprint import pprint
 import os
 from typing import List, Dict
 from global_utils import make_dir

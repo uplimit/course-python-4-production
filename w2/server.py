@@ -36,6 +36,11 @@ async def websocket_endpoint(websocket: WebSocket):
 # health check API
 @app.get("/health")
 async def get() -> Dict:
+    """
+    should send a JSON response in the below format:
+    {"status": "ok"}
+    """
+
     return {"status": "ok"}
 
 
