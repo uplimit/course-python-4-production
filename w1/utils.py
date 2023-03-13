@@ -111,11 +111,9 @@ class DataReader:
             'Country': 'Russia',
         }
         """
-        for n_row, row in enumerate(open(self._fp, "r")):
-            row_vals = row.strip('\n').split(self._sep)
-            row_vals = {key: value for key, value in zip(self._col_names, row_vals)}
-            row_vals['n_row'] = n_row
-            yield row_vals
+    ######################################## YOUR CODE HERE ##################################################
+
+    ######################################## YOUR CODE HERE ##################################################
 
     def get_file_path(self):
         return self._fp

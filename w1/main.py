@@ -43,21 +43,9 @@ def revenue_per_region(dp: DataProcessor) -> Dict:
         'United States': 121.499
     }
     """
+    ######################################## YOUR CODE HERE ##################################################
 
-    data_reader = dp.data_reader
-    data_reader_gen = (row for row in data_reader)
-
-    # skip first row as it is the column name
-    _ = next(data_reader_gen)
-
-    aggregate = dict()
-
-    for row in tqdm(data_reader_gen):
-        if row[constants.OutDataColNames.COUNTRY] not in aggregate:
-            aggregate[row[constants.OutDataColNames.COUNTRY]] = 0
-        aggregate[row[constants.OutDataColNames.COUNTRY]] += dp.to_float(row[constants.OutDataColNames.TOTAL_PRICE])
-
-    return aggregate
+    ######################################## YOUR CODE HERE ##################################################
 
 
 def get_sales_information(file_path: str) -> Dict:

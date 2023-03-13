@@ -15,29 +15,36 @@ class Logger:
         self.logger = logging.getLogger(module_name)
         make_dir(directory=os.path.join(CURRENT_FOLDER_NAME, 'logs'))
 
-        # self.logger.handlers.clear()
-
         self.f_handler = logging.FileHandler(os.path.join(CURRENT_FOLDER_NAME, 'logs', log_file_name))
 
         # Create formatters and add it to handlers
-        self.f_format = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-        self.f_handler.setFormatter(self.f_format)
+        ######################################## YOUR CODE HERE ##################################################
+        # set the logging formatter to the f_handler
+        ######################################## YOUR CODE HERE ##################################################
 
-        # Add handlers to the logger
-        self.logger.addHandler(self.f_handler)
-        self.logger.setLevel(logging.DEBUG)
+        ######################################## YOUR CODE HERE ##################################################
+        # Add handlers to the logger and setlevel to DEBUG
+        ######################################## YOUR CODE HERE ##################################################
 
     def warning(self, msg):
-        self.logger.warning(msg=msg)
+        pass
+        ######################################## YOUR CODE HERE ##################################################
+        ######################################## YOUR CODE HERE ##################################################
 
     def error(self, msg):
-        self.logger.error(msg=msg)
+        pass
+        ######################################## YOUR CODE HERE ##################################################
+        ######################################## YOUR CODE HERE ##################################################
 
     def info(self, msg):
-        self.logger.info(msg=msg)
+        pass
+        ######################################## YOUR CODE HERE ##################################################
+        ######################################## YOUR CODE HERE ##################################################
 
     def debug(self, msg):
-        self.logger.debug(msg=msg)
+        pass
+        ######################################## YOUR CODE HERE ##################################################
+        ######################################## YOUR CODE HERE ##################################################
 
 
 server_logger = Logger(log_file_name='server_logs.txt', module_name='server_logs')
