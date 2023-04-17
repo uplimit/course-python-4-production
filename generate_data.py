@@ -85,7 +85,7 @@ def generate_file(data_gen_obj, file_details):
 
     file_path = os.path.join(CURRENT_FOLDER, constants.DATA_FOLDER_NAME, file_details['folder_name'],
                              file_details['file_name'])
-    make_dir(directory=os.path.join(CURRENT_FOLDER, file_details['folder_name']))
+    make_dir(directory=os.path.join(CURRENT_FOLDER, constants.DATA_FOLDER_NAME, file_details['folder_name']))
 
     with open(file_path, 'w') as f:
         f.write(",".join([constants.OutDataColNames.STOCK_CODE, constants.OutDataColNames.DESCRIPTION,
