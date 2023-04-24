@@ -13,14 +13,18 @@ class Logger:
         """
         # Create a custom logger
         self.logger = logging.getLogger(module_name)
-        make_dir(directory=os.path.join(CURRENT_FOLDER_NAME, 'logs'))
+        make_dir(directory=os.path.join(CURRENT_FOLDER_NAME, "logs"))
 
         # self.logger.handlers.clear()
 
-        self.f_handler = logging.FileHandler(os.path.join(CURRENT_FOLDER_NAME, 'logs', log_file_name))
+        self.f_handler = logging.FileHandler(
+            os.path.join(CURRENT_FOLDER_NAME, "logs", log_file_name)
+        )
 
         # Create formatters and add it to handlers
-        self.f_format = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+        self.f_format = logging.Formatter(
+            "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+        )
         self.f_handler.setFormatter(self.f_format)
 
         # Add handlers to the logger
@@ -40,8 +44,5 @@ class Logger:
         self.logger.debug(msg=msg)
 
 
-server_logger = Logger(log_file_name='server_logs.txt', module_name='server_logs')
-main_logger = Logger(log_file_name='main_logs.txt', module_name='main_logs')
-
-
-
+server_logger = Logger(log_file_name="server_logs.txt", module_name="server_logs")
+main_logger = Logger(log_file_name="main_logs.txt", module_name="main_logs")

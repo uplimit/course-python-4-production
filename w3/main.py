@@ -40,7 +40,9 @@ def revenue_per_region(dp: DP) -> Dict:
     for row in tqdm(data_reader_gen):
         if row[constants.OutDataColNames.COUNTRY] not in aggregate:
             aggregate[row[constants.OutDataColNames.COUNTRY]] = 0
-        aggregate[row[constants.OutDataColNames.COUNTRY]] += dp.to_float(row[constants.OutDataColNames.TOTAL_PRICE])
+        aggregate[row[constants.OutDataColNames.COUNTRY]] += dp.to_float(
+            row[constants.OutDataColNames.TOTAL_PRICE]
+        )
 
     return aggregate
 
@@ -50,13 +52,20 @@ def get_sales_information(file_path: str) -> Dict:
     dp = DP(file_path=file_path)
 
     # print stats
-    dp.describe(column_names=[constants.OutDataColNames.UNIT_PRICE, constants.OutDataColNames.TOTAL_PRICE])
+    dp.describe(
+        column_names=[
+            constants.OutDataColNames.UNIT_PRICE,
+            constants.OutDataColNames.TOTAL_PRICE,
+        ]
+    )
 
     # return total revenue and revenue per region
     return {
-        'total_revenue': dp.aggregate(column_name=constants.OutDataColNames.TOTAL_PRICE),
-        'revenue_per_region': revenue_per_region(dp),
-        'file_name': get_file_name(file_path)
+        "total_revenue": dp.aggregate(
+            column_name=constants.OutDataColNames.TOTAL_PRICE
+        ),
+        "revenue_per_region": revenue_per_region(dp),
+        "file_name": get_file_name(file_path),
     }
 
 
@@ -71,7 +80,10 @@ def batch_files(file_paths: List[str], n_processes: int) -> List[set]:
     first_set = file_paths[0:first_set_len]
     second_set = file_paths[first_set_len:]
 
-    batches = [set(file_paths[i:i + n_per_batch]) for i in range(0, len(first_set), n_per_batch)]
+    batches = [
+        set(file_paths[i : i + n_per_batch])
+        for i in range(0, len(first_set), n_per_batch)
+    ]
     for ind, each_file in enumerate(second_set):
         batches[ind].add(each_file)
 
@@ -83,7 +95,7 @@ def run(file_names: List[str], n_process: int) -> List[Dict]:
     st = time.time()
 
     print("Process : {}".format(n_process))
-    folder_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data')
+    folder_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
     file_paths = [os.path.join(folder_path, file_name) for file_name in file_names]
     revenue_data = [get_sales_information(file_path) for file_path in file_paths]
 
@@ -145,18 +157,31 @@ def main() -> List[Dict]:
     st = time.time()
     n_processes = 3
 
-    parser = argparse.ArgumentParser(description="Choose from one of these : [tst|sml|bg]")
-    parser.add_argument('--type',
-                        default='tst',
-                        choices=['tst', 'sml', 'bg'],
-                        help='Type of data to generate')
+    parser = argparse.ArgumentParser(
+        description="Choose from one of these : [tst|sml|bg]"
+    )
+    parser.add_argument(
+        "--type",
+        default="tst",
+        choices=["tst", "sml", "bg"],
+        help="Type of data to generate",
+    )
     args = parser.parse_args()
 
-    data_folder_path = os.path.join(CURRENT_FOLDER_NAME, '..', constants.DATA_FOLDER_NAME, args.type)
-    files = [str(file) for file in os.listdir(data_folder_path) if str(file).endswith('csv')]
+    data_folder_path = os.path.join(
+        CURRENT_FOLDER_NAME, "..", constants.DATA_FOLDER_NAME, args.type
+    )
+    files = [
+        str(file) for file in os.listdir(data_folder_path) if str(file).endswith("csv")
+    ]
 
-    output_save_folder = os.path.join(CURRENT_FOLDER_NAME, '..', 'output', args.type,
-                                      datetime.now().strftime("%B %d %Y %H-%M-%S"))
+    output_save_folder = os.path.join(
+        CURRENT_FOLDER_NAME,
+        "..",
+        "output",
+        args.type,
+        datetime.now().strftime("%B %d %Y %H-%M-%S"),
+    )
     make_dir(output_save_folder)
     file_paths = [os.path.join(data_folder_path, file_name) for file_name in files]
 
@@ -164,25 +189,34 @@ def main() -> List[Dict]:
 
     with multiprocessing.Pool(processes=n_processes) as pool:
         # Apply the worker function to each argument in the list in parallel
-        revenue_data = pool.starmap(run, [(batch, n_process) for n_process, batch in enumerate(batches)])
+        revenue_data = pool.starmap(
+            run, [(batch, n_process) for n_process, batch in enumerate(batches)]
+        )
         revenue_data = flatten(lst=revenue_data)
         # Close the pool and wait for all the tasks to complete
         pool.close()
         pool.join()
 
     en = time.time()
-    print("Overall time taken : {}".format(en-st))
+    print("Overall time taken : {}".format(en - st))
 
     for yearly_data in revenue_data:
-        with open(os.path.join(output_save_folder, f'{yearly_data["file_name"]}.json'), 'w') as f:
+        with open(
+            os.path.join(output_save_folder, f'{yearly_data["file_name"]}.json'), "w"
+        ) as f:
             f.write(json.dumps(yearly_data))
 
-        plot_sales_data(yearly_revenue=yearly_data['revenue_per_region'], year=yearly_data["file_name"],
-                        plot_save_path=os.path.join(output_save_folder, f'{yearly_data["file_name"]}.png'))
+        plot_sales_data(
+            yearly_revenue=yearly_data["revenue_per_region"],
+            year=yearly_data["file_name"],
+            plot_save_path=os.path.join(
+                output_save_folder, f'{yearly_data["file_name"]}.png'
+            ),
+        )
 
     return revenue_data
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     res = main()
     pprint(res)

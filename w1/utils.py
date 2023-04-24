@@ -34,14 +34,14 @@ class Stats:
         self.calculate_75()
 
         return {
-            'min': self._min,
-            'max': self._max,
-            'mean': self._mean,
-            'median': self._median,
-            'std': self._std,
-            '25': self._25,
-            '50': self._50,
-            '75': self._75
+            "min": self._min,
+            "max": self._max,
+            "mean": self._mean,
+            "median": self._median,
+            "std": self._std,
+            "25": self._25,
+            "50": self._50,
+            "75": self._75,
         }
 
     def update_min(self, val: float) -> None:
@@ -111,10 +111,11 @@ class DataReader:
             'Country': 'Russia',
         }
         """
+
         for n_row, row in enumerate(open(self._fp, "r")):
-            row_vals = row.strip('\n').split(self._sep)
+            row_vals = row.strip("\n").split(self._sep)
             row_vals = {key: value for key, value in zip(self._col_names, row_vals)}
-            row_vals['n_row'] = n_row
+            row_vals["n_row"] = n_row
             yield row_vals
 
     def get_file_path(self):
@@ -122,4 +123,3 @@ class DataReader:
 
     def get_column_names(self):
         return self._col_names
-

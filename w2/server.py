@@ -40,7 +40,6 @@ async def get() -> Dict:
     should send a JSON response in the below format:
     {"status": "ok"}
     """
-
     return {"status": "ok"}
 
 
@@ -50,7 +49,7 @@ async def get() -> HTMLResponse:
     """
     should render the HTML file - index.html when a user goes to http://127.0.0.1:8000/
     """
-    with open('index.html', 'r') as f:
+    with open("index.html", "r") as f:
         html = f.read()
 
     # render a HTML page
@@ -68,7 +67,14 @@ async def get() -> List[ProcessStatus]:
     processes = db.read_all()
 
     return [
-        ProcessStatus(process_id=process['process_id'], file_name=process['file_name'],
-                      file_path=process['file_path'], description=process['description'],
-                      start_time=process['start_time'], end_time=process['end_time'], percentage=process['percentage'])
-        for process in processes]
+        ProcessStatus(
+            process_id=process["process_id"],
+            file_name=process["file_name"],
+            file_path=process["file_path"],
+            description=process["description"],
+            start_time=process["start_time"],
+            end_time=process["end_time"],
+            percentage=process["percentage"],
+        )
+        for process in processes
+    ]

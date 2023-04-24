@@ -15,7 +15,9 @@ class DataProcessor:
         self._n_rows = 0
 
         self._set_col_names()
-        self.data_reader = DataReader(fp=file_path, sep=self._sep, col_names=self._col_names)
+        self.data_reader = DataReader(
+            fp=file_path, sep=self._sep, col_names=self._col_names
+        )
         self._set_n_rows()
 
     @staticmethod
@@ -36,7 +38,7 @@ class DataProcessor:
 
     def _set_col_names(self) -> None:
         with open(self._fp) as f:
-            first_row = f.readline().strip('\n')
+            first_row = f.readline().strip("\n")
 
         col_names = first_row.split(self._sep)
         self._col_names = col_names
