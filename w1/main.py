@@ -8,6 +8,8 @@ import argparse
 from global_utils import get_file_name, make_dir, plot_sales_data
 from datetime import datetime
 import json
+import sys
+from functools import reduce
 
 
 CURRENT_FOLDER_NAME = os.path.dirname(os.path.abspath(__file__))
@@ -44,17 +46,37 @@ def revenue_per_region(dp: DataProcessor) -> Dict:
     }
     """
     ######################################## YOUR CODE HERE ##################################################
-    
-    # Find the aggragate TotalPrice per region
 
-    # get list of regions from data?
-    countries = {country for country in dp["Country"]}
-    filter()
-    # perform aggregation for each region list
-    # combine results into single dict?
+    # get the generator from data_reader
+    data_reader_gen = (row for row in dp.data_reader)
+
+    # skip first row as it is the column name
+    _ = next(data_reader_gen)
+
+    # create a set of countries
+    # this consumes the generator...
+    countries = {row["Country"] for row in data_reader_gen}
+
+    data_reader_gen = (row for row in dp.data_reader)
+    _ = next(data_reader_gen)
+
+    # TODO replace for loop with list comprehension?
+    # TODO replace with reduce(map(filter()))???
+    # filter data by country
+
+    for country in countries:
+        
+        country_rows = filter(lambda x: country in x["Country"], data_reader_gen)
+        pprint(dict(country_rows))
+        print(type(country_rows))
+        # sys.exit()
+        
+        total_price = reduce(lambda x, y: x + y, country_rows["TotalPrice"])
+        # total_price = sum(x["TotalPrice"] for x in country_rows)
+        print(f"{country}:{total_price}")
 
     ######################################## YOUR CODE HERE ##################################################
-
+    sys.exit()
 
 def get_sales_information(file_path: str) -> Dict:
     # Initialize
