@@ -59,10 +59,12 @@ def revenue_per_region(dp: DataProcessor) -> Dict:
     # loop through each dict and update aggregate price based on country key
     # TODO replace loop with list-comprehension, filter(), reduce()?
     for row in tqdm(data_reader_gen):    
-        if row["Country"] in agg_revenue.keys():
-            agg_revenue[row["Country"]] += dp.to_float(row["TotalPrice"])
-        else:
+        if row["Country"] not in agg_revenue.keys():
+            # use assignment if country does not exist within dict yet
             agg_revenue[row["Country"]] = dp.to_float(row["TotalPrice"])
+        else:
+            # use addition assignment if country key already exists within dict
+            agg_revenue[row["Country"]] += dp.to_float(row["TotalPrice"])
     return agg_revenue
     ######################################## YOUR CODE HERE ##################################################
 
