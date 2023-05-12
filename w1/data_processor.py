@@ -3,6 +3,7 @@ from pprint import pprint
 from w1.utils import Stats, DataReader
 from tqdm import tqdm
 import os
+from functools import reduce
 
 
 class DataProcessor:
@@ -15,7 +16,9 @@ class DataProcessor:
         self._n_rows = 0
 
         self._set_col_names()
-        self.data_reader = DataReader(fp=file_path, sep=self._sep, col_names=self._col_names)
+        self.data_reader = DataReader(
+            fp=file_path, sep=self._sep, col_names=self._col_names
+        )
         self._set_n_rows()
 
     @staticmethod
@@ -36,7 +39,7 @@ class DataProcessor:
 
     def _set_col_names(self) -> None:
         with open(self._fp) as f:
-            first_row = f.readline().strip('\n')
+            first_row = f.readline().strip("\n")
 
         col_names = first_row.split(self._sep)
         self._col_names = col_names
@@ -74,10 +77,21 @@ class DataProcessor:
         StockCode    , Description    , UnitPrice  , Quantity, TotalPrice , Country
         22180        , RETROSPOT LAMP , 19.96      , 4       , 79.84      , Russia
         23017        , APOTHECARY JAR , 24.96      , 1       , 24.96      , Germany
-        84732D       , IVORY CLOCK    , 0.39       , 2       , 0.78       ,India
+        84732D       , IVORY CLOCK    , 0.39       , 2       , 0.78       , India
 
         aggregate should be 105.58
         """
         ######################################## YOUR CODE HERE ##################################################
+        # get the generator from data_reader
+        data_reader_gen = (row for row in self.data_reader)
 
+        # skip first row as it is the column name
+        _ = next(data_reader_gen)
+
+        # create a list of values associated with column_name
+        col_values = map(lambda x: self.to_float(x[column_name]), data_reader_gen)
+
+        # calculate the sum of these values
+        col_sum = reduce(lambda x, y: x + y, col_values)
+        return col_sum
         ######################################## YOUR CODE HERE ##################################################

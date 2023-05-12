@@ -44,6 +44,14 @@ def revenue_per_region(dp: DataProcessor) -> Dict:
     }
     """
     ######################################## YOUR CODE HERE ##################################################
+    
+    # Find the aggragate TotalPrice per region
+
+    # get list of regions from data?
+    countries = {country for country in dp["Country"]}
+    filter()
+    # perform aggregation for each region list
+    # combine results into single dict?
 
     ######################################## YOUR CODE HERE ##################################################
 

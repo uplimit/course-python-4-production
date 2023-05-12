@@ -2,6 +2,7 @@ from typing import Dict
 import numpy as np
 from typing import Generator, List
 import os
+import csv
 
 CURRENT_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
@@ -34,14 +35,14 @@ class Stats:
         self.calculate_75()
 
         return {
-            'min': self._min,
-            'max': self._max,
-            'mean': self._mean,
-            'median': self._median,
-            'std': self._std,
-            '25': self._25,
-            '50': self._50,
-            '75': self._75
+            "min": self._min,
+            "max": self._max,
+            "mean": self._mean,
+            "median": self._median,
+            "std": self._std,
+            "25": self._25,
+            "50": self._50,
+            "75": self._75,
         }
 
     def update_min(self, val: float) -> None:
@@ -111,13 +112,21 @@ class DataReader:
             'Country': 'Russia',
         }
         """
-    ######################################## YOUR CODE HERE ##################################################
 
-    ######################################## YOUR CODE HERE ##################################################
+        ######################################## YOUR CODE HERE ##################################################
+        with open(self._fp, "r") as f:
+            
+            # loop through each row of data
+            for line in f:
+                # extract values from each line as a list delimited by self._sep
+                row = line.strip().split(self._sep)
+                # create dictionary for each row using self._col_names as key
+                row_dict = {self._col_names[i]: value for i, value in enumerate(row)}
+                yield row_dict
+        ######################################## YOUR CODE HERE ##################################################
 
     def get_file_path(self):
         return self._fp
 
     def get_column_names(self):
         return self._col_names
-
