@@ -52,31 +52,19 @@ def revenue_per_region(dp: DataProcessor) -> Dict:
 
     # skip first row as it is the column name
     _ = next(data_reader_gen)
+    
+    # create empty dictionary to store aggregate revenue by country
+    agg_revenue = {}
 
-    # create a set of countries
-    # this consumes the generator...
-    countries = {row["Country"] for row in data_reader_gen}
-
-    data_reader_gen = (row for row in dp.data_reader)
-    _ = next(data_reader_gen)
-
-    # TODO replace for loop with list comprehension?
-    # TODO replace with reduce(map(filter()))???
-    # filter data by country
-
-    for country in countries:
-        
-        country_rows = filter(lambda x: country in x["Country"], data_reader_gen)
-        pprint(dict(country_rows))
-        print(type(country_rows))
-        # sys.exit()
-        
-        total_price = reduce(lambda x, y: x + y, country_rows["TotalPrice"])
-        # total_price = sum(x["TotalPrice"] for x in country_rows)
-        print(f"{country}:{total_price}")
-
+    # loop through each dict and update aggregate price based on country key
+    # TODO replace loop with list-comprehension, filter(), reduce()?
+    for row in tqdm(data_reader_gen):    
+        if row["Country"] in agg_revenue.keys():
+            agg_revenue[row["Country"]] += dp.to_float(row["TotalPrice"])
+        else:
+            agg_revenue[row["Country"]] = dp.to_float(row["TotalPrice"])
+    return agg_revenue
     ######################################## YOUR CODE HERE ##################################################
-    sys.exit()
 
 def get_sales_information(file_path: str) -> Dict:
     # Initialize
