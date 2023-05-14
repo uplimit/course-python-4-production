@@ -45,6 +45,21 @@ def revenue_per_region(dp: DataProcessor) -> Dict:
     """
     ######################################## YOUR CODE HERE ##################################################
 
+    data_reader_gen = (row for row in dp.data_reader)
+    _ = next(data_reader_gen)
+
+    region_wise_aggregator = {}
+
+    for row in tqdm(data_reader_gen):
+        country = row['Country']
+        sale_value = row['TotalPrice']
+        try:
+            region_wise_aggregator[country] += sale_value
+        except KeyError:
+            region_wise_aggregator[country] = sale_value
+    
+    return region_wise_aggregator
+
     ######################################## YOUR CODE HERE ##################################################
 
 

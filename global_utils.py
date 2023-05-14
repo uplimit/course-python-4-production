@@ -43,7 +43,8 @@ def plot_sales_data(yearly_revenue, year, plot_save_path):
 
     yearly_revenue = [(country, revenue) for country, revenue in yearly_revenue.items()]
     countries = [str(country) for country, _ in yearly_revenue]
-    revenue = [int(revenue) for _, revenue in yearly_revenue]
+    # revenue = [int(revenue) for _, revenue in yearly_revenue]
+    revenue = [int(float(revenue)) for _, revenue in yearly_revenue]
 
     plt.bar(countries, revenue, align='edge', width=0.5)
     plt.title(f'Revenue Per Country {year}', fontsize=14)

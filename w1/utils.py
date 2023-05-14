@@ -113,6 +113,14 @@ class DataReader:
         """
     ######################################## YOUR CODE HERE ##################################################
 
+        #open file to read
+        
+        with open(self._fp, 'r') as file:
+            for row in file:
+                #return generators
+                yield {k:v.strip() for k,v in zip(self._col_names, row.split(self._sep))} 
+
+    
     ######################################## YOUR CODE HERE ##################################################
 
     def get_file_path(self):
