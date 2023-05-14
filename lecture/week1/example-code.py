@@ -6,9 +6,20 @@ Generators
 # =============================================================================
 def fibonacci(limit):
     a, b = 0, 1
+
+    # start with 0 and 1
+    print('first a ', a)
+    print('first b', b)
     while a < limit:
+        #this is whats returned in the loop 
         yield a
+
+        # after a is returned by the yield statement:
+         # a becomes b
+         # b becomes a + b
         a, b = b, a + b
+        print('new a', a)
+        print('new b', b)
 
 fib_gen = fibonacci(10)
 for number in fib_gen:
@@ -17,16 +28,23 @@ for number in fib_gen:
 # =============================================================================
 # Using next with a generator
 # =============================================================================
+
+# took no arguments
 def even_numbers():
     num = 0
     while True:
+        # return num
         yield num
+        # after its returned, count it by two
         num += 2
 
 even_gen = even_numbers()
 
 # Get the first 5 even numbers
 for _ in range(5):
+    # this would only return the generator object
+    # because we're not looping through the generator object
+    print(even_gen)
     print(next(even_gen))
 
 # =============================================================================
@@ -35,8 +53,11 @@ for _ in range(5):
 def limited_alphabet(limit):
     for i in range(65, 65 + limit):
         yield chr(i)
+        print('i',i)
+        print('chri', chr(i))
 
 alphabet_gen = limited_alphabet(5)
+
 
 print(next(alphabet_gen, "End of sequence"))
 print(next(alphabet_gen, "End of sequence"))

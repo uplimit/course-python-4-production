@@ -1,6 +1,6 @@
 import os
-from w1.main import get_sales_information
-from w1.utils import DataReader
+from main import get_sales_information
+from utils import DataReader
 import constants
 from global_utils import blockPrint, enablePrint
 from pprint import pprint

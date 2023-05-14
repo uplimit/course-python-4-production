@@ -113,6 +113,11 @@ class DataReader:
         """
     ######################################## YOUR CODE HERE ##################################################
 
+        # read file 
+        for row in open(self._fp, 'r'):
+            # parse each row, create dictionary from each row, yield it
+            yield {key: value for key, value in zip(self._col_names, row.strip('\n').split(self._sep))}
+
     ######################################## YOUR CODE HERE ##################################################
 
     def get_file_path(self):
