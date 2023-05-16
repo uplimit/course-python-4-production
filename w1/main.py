@@ -44,6 +44,35 @@ def revenue_per_region(dp: DataProcessor) -> Dict:
     }
     """
     ######################################## YOUR CODE HERE ##################################################
+    #initialize a generator
+    dr = (row for row in dp.data_reader)
+
+    # #iterate over each row
+    next(dr)
+    #option 1
+    # result = {}
+
+    # for row in dr:
+    #     if row['Country'] in result:
+    #         result[row['Country']] += row['TotalPrice']
+    #     else:
+    #         result[row['Country']] = row['TotalPrice']
+    
+    # return result
+
+    #option 2
+    from collections import defaultdict
+    #provide initial value for every key in defaultdict
+
+    result = defaultdict(lambda: 0)
+    for row in dr:
+        result[row['Country']] += dp.to_float(row['TotalPrice'])
+    #convert output to simple dict
+    return dict(result)
+
+
+
+    #aggregate revenue_per_region (totalprice)
 
     ######################################## YOUR CODE HERE ##################################################
 
@@ -94,4 +123,8 @@ def main():
 
 if __name__ == '__main__':
     main()
+#test the generator
+    # dp =DataProcessor('/workspace/course-python-4-production/data/tst/2015.csv')
+
+    # print(revenue_per_region(dp))
 

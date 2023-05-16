@@ -79,5 +79,30 @@ class DataProcessor:
         aggregate should be 105.58
         """
         ######################################## YOUR CODE HERE ##################################################
+        #initialize datareader
+        dr = (row for row in self.data_reader)
+        #skip first row
+        next(dr)
+
+        agg_result = 0
+
+        #iterate over rows
+        for row in dr:
+        #aggregate the desired column
+            agg_result += self.to_float(row[column_name])
+
+        return agg_result
+
+#test iterator
+if __name__ == '__main__':
+    dp = DataProcessor('/workspace/course-python-4-production/data/tst/2015.csv')
+
+    result = dp.aggregate('TotalPrice')
+
+    print(result)
+
+        
+        
+
 
         ######################################## YOUR CODE HERE ##################################################
