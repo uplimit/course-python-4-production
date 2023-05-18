@@ -6,3 +6,4 @@ matplotlib~=3.7.0
 starlette~=0.25.0
 pydantic~=1.10.5
 pytest~=7.2.1
+httpx~=0.24.0
