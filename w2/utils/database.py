@@ -38,15 +38,30 @@ class DB:
         - process_id : TEXT (not null)
         - file_name : TEXT (default is null)
         - description : TEXT (default is null)
+        - file_path : TEXT (default is null)
         - start_time : TEXT (not null)
         - end_time : TEXT (default is null)
         - percentage : REAL (default is null)
 
         Read more about datatypes in Sqlite here -> https://www.sqlite.org/datatype3.html
         """
-    ######################################## YOUR CODE HERE ##################################################
+        ######################################## YOUR CODE HERE ##################################################
+        self._connection.execute(f'''
+            CREATE TABLE IF NOT EXISTS {self._table_name} 
+                (
+                process_id TEXT PRIMARY KEY NOT NULL, 
+                file_name TEXT DEFAULT NULL, 
+                file_path TEXT DEFAULT NULL, 
+                description TEXT DEFAULT NULL, 
+                start_time TEXT NOT NULL,
+                end_time TEXT DEFAULT NULL, 
+                percentage REAL DEFAULT NULL
+                )
+                ''')
 
-    ######################################## YOUR CODE HERE ##################################################
+        self._connection.commit()
+        
+        ######################################## YOUR CODE HERE ##################################################
 
     def insert(self, process_id, start_time, file_name=None, file_path=None,
                description=None, end_time=None, percentage=None) -> None:
@@ -62,9 +77,13 @@ class DB:
         :param percentage: Percentage of process completed
         :return: None
         """
-    ######################################## YOUR CODE HERE ##################################################
+        ######################################## YOUR CODE HERE ##################################################    
+        self._connection.execute(f'''INSERT INTO {self._table_name}
+                                     (process_id, file_name, file_path, description, start_time, end_time, percentage)
+                                      VALUES (?, ?, ?, ?, ?, ?, ?)''', (process_id, file_name, file_path, description, start_time, end_time, percentage))
+        self._connection.commit()
 
-    ######################################## YOUR CODE HERE ##################################################
+        ######################################## YOUR CODE HERE ##################################################
 
     def read_all(self) -> List[Dict]:
         data = []
@@ -94,8 +113,10 @@ class DB:
         :param percentage: Percentage of process completed
         :return: None
         """
-    ######################################## YOUR CODE HERE ##################################################
+        ######################################## YOUR CODE HERE ##################################################
+        self._connection.execute(f'''UPDATE {self._table_name} SET percentage='{percentage}' WHERE process_id='{process_id}';''')
+        self._connection.commit()
 
-    ######################################## YOUR CODE HERE ##################################################
+        ######################################## YOUR CODE HERE ##################################################
 
 
