@@ -55,7 +55,7 @@ async def get() -> HTMLResponse:
     ######################################## YOUR CODE HERE ##################################################
     with open("index.html", "r") as f:
         content = f.read()
-        return HTMLResponse(content=content)
+        return HTMLResponse(content=content, status_code=200)
     ######################################## YOUR CODE HERE ##################################################
 
 
@@ -66,6 +66,5 @@ async def get() -> List[ProcessStatus]:
     Get all the records from the process table and return it using the pydantic model ProcessStatus
     """
     ######################################## YOUR CODE HERE ##################################################
-    process_data = DB().read_all()
-    process_status = [ProcessStatus(**i) for i in process_data]
+    return [ProcessStatus(**i) for i in DB().read_all()]
     ######################################## YOUR CODE HERE ##################################################
