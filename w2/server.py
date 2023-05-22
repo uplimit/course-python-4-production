@@ -8,14 +8,16 @@ from starlette.websockets import WebSocket, WebSocketState
 from w2.utils.websocket import ConnectionManager
 from w2.utils.response_model import ProcessStatus
 from w2.utils.database import DB
+from contextlib import asynccontextmanager
 
-app = FastAPI()
 manager = ConnectionManager()
 
-# start an asynchronous task that will keep broadcasting the process status to all the connected clients
-broadcast_continuous = Thread(target=asyncio.run, args=(manager.broadcast_all(),))
-broadcast_continuous.start()
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    asyncio.create_task(manager.broadcast_all())
+    yield
 
+app = FastAPI(lifespan=lifespan)
 
 # The below endpoint is used to create websocket connection
 @app.websocket("/ws")

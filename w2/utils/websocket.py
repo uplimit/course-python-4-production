@@ -39,7 +39,8 @@ class ConnectionManager:
                         processes = self.db.read_all()
                         await connection.send_json(processes)
 
-                time.sleep(1)
+                import asyncio
+                await asyncio.sleep(1)
 
             except Exception as e:
                 print(e)
