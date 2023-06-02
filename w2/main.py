@@ -57,7 +57,7 @@ class DP(DataProcessor):
         # get generator from data_reader
         data_reader_gen = (row for row in self.data_reader)
 
-        # skip first row as it is the column name
+        # skip first row as it is the column name test
         _ = next(data_reader_gen)
 
         aggregate = 0
