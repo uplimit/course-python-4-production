@@ -2,6 +2,7 @@ from typing import Dict
 import numpy as np
 from typing import Generator, List
 import os
+import csv
 
 CURRENT_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
@@ -112,7 +113,13 @@ class DataReader:
         }
         """
     ######################################## YOUR CODE HERE ##################################################
-
+        with open(self.get_file_path(), 'r') as f:
+            rows = csv.reader(f)
+            for row in rows:
+                single_row = {}
+                for idx, col in enumerate(self.get_column_names()):
+                    single_row[col] = row[idx]
+                yield single_row
     ######################################## YOUR CODE HERE ##################################################
 
     def get_file_path(self):

@@ -8,6 +8,7 @@ import argparse
 from global_utils import get_file_name, make_dir, plot_sales_data
 from datetime import datetime
 import json
+from collections import defaultdict
 
 
 CURRENT_FOLDER_NAME = os.path.dirname(os.path.abspath(__file__))
@@ -44,7 +45,18 @@ def revenue_per_region(dp: DataProcessor) -> Dict:
     }
     """
     ######################################## YOUR CODE HERE ##################################################
+    data_reader_gen = (row for row in dp.data_reader)
 
+    _ = next(data_reader_gen)
+
+    rev_region = defaultdict(lambda: 0.0)
+
+    for row in data_reader_gen:
+        country = row['Country']
+        val = dp.to_float(row['TotalPrice'])
+        rev_region[country] += val
+
+    return rev_region
     ######################################## YOUR CODE HERE ##################################################
 
 
