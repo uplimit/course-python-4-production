@@ -9,6 +9,7 @@ from w2.utils.websocket import ConnectionManager
 from w2.utils.response_model import ProcessStatus
 from w2.utils.database import DB
 
+# entry point for fastAPI
 app = FastAPI()
 manager = ConnectionManager()
 
@@ -40,9 +41,8 @@ async def get() -> Dict:
     should send a JSON response in the below format:
     {"status": "ok"}
     """
-
-    ######################################## YOUR CODE HERE ##################################################
-
+    # json format
+    return {"status": "ok"}
     ######################################## YOUR CODE HERE ##################################################
 
 
@@ -53,7 +53,9 @@ async def get() -> HTMLResponse:
     should render the HTML file - index.html when a user goes to http://127.0.0.1:8000/
     """
     ######################################## YOUR CODE HERE ##################################################
-
+    with open("index.html") as f:
+        html = f.read()
+    return HTMLResponse(content=html, status_code=200)
     ######################################## YOUR CODE HERE ##################################################
 
 
@@ -64,5 +66,11 @@ async def get() -> List[ProcessStatus]:
     Get all the records from the process table and return it using the pydantic model ProcessStatus
     """
     ######################################## YOUR CODE HERE ##################################################
+    db = DB()
+    #defined in databases class
+    processes = db.read_all()
 
+    #processstatus in utils
+    # ** allows to process keys of dict seperately
+    return [ProcessStatus(**process) for process in processes]
     ######################################## YOUR CODE HERE ##################################################

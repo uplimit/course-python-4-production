@@ -11,6 +11,8 @@ class DB:
     def __init__(self, db_name: str = "database.sqlite") -> None:
         self._db_save_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', 'database')
         make_dir(self._db_save_path)
+
+        # initial a connection 
         self._connection = sqlite3.connect(os.path.join(self._db_save_path, db_name),
                                            check_same_thread=False)
         self._table_name = 'processes'
@@ -45,7 +47,20 @@ class DB:
         Read more about datatypes in Sqlite here -> https://www.sqlite.org/datatype3.html
         """
     ######################################## YOUR CODE HERE ##################################################
-
+        sql = f"""
+        create table if not exists {self._table_name}
+        (
+            process_id TEXT not null,
+            file_name TEXT default null,
+            file_path TEXT default null,
+            description TEXT default null,
+            start_time TEXT not null,
+            end_time TEXT null,
+            percentage REAL default null
+        )
+        """
+        self._connection.execute(sql)
+        self._connection.commit()
     ######################################## YOUR CODE HERE ##################################################
 
     def insert(self, process_id, start_time, file_name=None, file_path=None,
@@ -63,7 +78,33 @@ class DB:
         :return: None
         """
     ######################################## YOUR CODE HERE ##################################################
-
+        col_vals = [
+            process_id,
+            file_name, 
+            file_path, 
+            description, 
+            start_time, 
+            end_time, 
+            percentage
+        ]
+        sql = f"""
+        insert into {self._table_name}
+        (
+            process_id,
+            file_name, 
+            file_path, 
+            description, 
+            start_time, 
+            end_time, 
+            percentage
+        )
+        values
+        (
+            ?,?,?,?,?,?,?
+        )
+        """
+        self._connection.execute(sql, col_vals)
+        self._connection.commit()
     ######################################## YOUR CODE HERE ##################################################
 
     def read_all(self) -> List[Dict]:
@@ -95,7 +136,10 @@ class DB:
         :return: None
         """
     ######################################## YOUR CODE HERE ##################################################
+        self._connection.execute(f'''UPDATE {self._table_name} SET percentage='{percentage}'
+                                     WHERE process_id='{process_id}';''')
 
+        self._connection.commit()
     ######################################## YOUR CODE HERE ##################################################
 
 
