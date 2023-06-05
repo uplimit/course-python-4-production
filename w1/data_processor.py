@@ -93,9 +93,7 @@ class DataProcessor:
         total = float(0)
         # add to the total as we iterate through the file
         for row in tqdm(data_reader_gen):
-            for column in self._col_names:
-                if column == column_name:
-                    total += float(row[column_name])
+            total += float(row[column_name])
 
         return total
         ######################################## YOUR CODE HERE ##################################################
