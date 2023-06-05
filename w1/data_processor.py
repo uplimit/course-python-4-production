@@ -79,7 +79,7 @@ class DataProcessor:
 
         aggregate should be 105.58
         """
-
+        ######################################## YOUR CODE HERE ##################################################
         # get the value at column name in the current row
         # iterate over the entire file
         # return the total as a float
@@ -98,3 +98,4 @@ class DataProcessor:
                     total += float(row[column_name])
 
         return total
+        ######################################## YOUR CODE HERE ##################################################

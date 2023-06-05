@@ -111,17 +111,15 @@ class DataReader:
             'Country': 'Russia',
         }
         """
-
+    ######################################## YOUR CODE HERE ##################################################
         for row in open(self._fp, 'r'):
             row = [ x.strip() for x in row.split(',')]
-        
-            datarow = {}
-            for x in range(len(self._col_names)):
-                datarow[self._col_names[x]] = row[x]
-            yield datarow
-        # file has already been defined.  Generator function, read a row, create a dictionary, return it.
-    ######################################## YOUR CODE HERE ##################################################
 
+            #dictionary comprehension
+            datarow = { self._col_names[x]:row[x] for x in range(len(self._col_names))}
+            #for x in range(len(self._col_names)):
+            #    datarow[self._col_names[x]] = row[x]
+            yield datarow
     ######################################## YOUR CODE HERE ##################################################
 
     def get_file_path(self):
