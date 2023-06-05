@@ -18,7 +18,7 @@ def revenue_per_region(dp: DataProcessor) -> Dict:
     Input : object of instance type Class DataProcessor
     Output : Dict
 
-    The method should find the aggregate revenue per region
+    The method should find the aggregate revenue per counry
 
     For example if the file format is as below:
 
@@ -43,10 +43,27 @@ def revenue_per_region(dp: DataProcessor) -> Dict:
         'United States': 121.499
     }
     """
-    ######################################## YOUR CODE HERE ##################################################
 
-    ######################################## YOUR CODE HERE ##################################################
+    # file is open and pass to data processor.
+    # Need to aggregate totalprice, grouping by country
+    # 
 
+    # get generator from data_reader
+    data_reader_gen = (row for row in dp.data_reader)
+
+    # skip first row as it is the column name
+    _ = next(data_reader_gen)
+
+    # kickoff the new dictionary
+    country_revenue = {}
+
+    # update stats as we iterate through the file
+    for row in tqdm(data_reader_gen):
+        if row['Country'] in country_revenue:
+            country_revenue[row['Country']] += float(row['TotalPrice'])
+        else:
+            country_revenue[row['Country']] = float(row['TotalPrice'])
+    return country_revenue    
 
 def get_sales_information(file_path: str) -> Dict:
     # Initialize
