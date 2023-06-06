@@ -45,7 +45,12 @@ class DB:
         Read more about datatypes in Sqlite here -> https://www.sqlite.org/datatype3.html
         """
     ######################################## YOUR CODE HERE ##################################################
-
+        cursor = self._connection.cursor()
+        cursor.execute('CREATE TABLE if not exists ' + self._table_name + '''
+            (process_id TEXT NOT NULL, file_name TEXT , file_path TEXT, description TEXT, start_time TEXT NOT NULL, end_time TEXT, percentage REAL)
+        '''
+                )
+        self._connection.commit()
     ######################################## YOUR CODE HERE ##################################################
 
     def insert(self, process_id, start_time, file_name=None, file_path=None,
@@ -63,7 +68,14 @@ class DB:
         :return: None
         """
     ######################################## YOUR CODE HERE ##################################################
-
+        cursor = self._connection.cursor()
+        columns = ','.join(str(item) for item in self._col_order)
+        #'process_id', 'file_name', 'file_path', 'description', 'start_time', 'end_time', 'percentage
+        sqlstring = 'INSERT INTO ' + self._table_name + ' (' + columns + ') VALUES (?,?,?,?,?,?,?)'
+        data_params = (process_id, file_name, file_path, description, start_time, end_time, percentage)
+        #print(' SQL STRING ' + sqlstring)
+        cursor.execute(sqlstring, data_params)
+        self._connection.commit()
     ######################################## YOUR CODE HERE ##################################################
 
     def read_all(self) -> List[Dict]:
@@ -95,7 +107,10 @@ class DB:
         :return: None
         """
     ######################################## YOUR CODE HERE ##################################################
-
+        cursor = self._connection.cursor()
+        #values = [value for key,value in locals() if key != self]
+        cursor.execute('UPDATE ' + self._table_name + ' SET percentage = ' + str(percentage) + ' WHERE process_id = ' + "'" + process_id + "'" )
+        self._connection.commit()
     ######################################## YOUR CODE HERE ##################################################
 
 

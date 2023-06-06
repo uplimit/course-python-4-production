@@ -42,7 +42,7 @@ async def get() -> Dict:
     """
 
     ######################################## YOUR CODE HERE ##################################################
-
+    return {"status": "ok"}
     ######################################## YOUR CODE HERE ##################################################
 
 
@@ -53,7 +53,10 @@ async def get() -> HTMLResponse:
     should render the HTML file - index.html when a user goes to http://127.0.0.1:8000/
     """
     ######################################## YOUR CODE HERE ##################################################
-
+    html_file = open('index.html', 'r')
+    html_content = html_file.read()
+    html_file.close()
+    return HTMLResponse(content=html_content, status_code=200)
     ######################################## YOUR CODE HERE ##################################################
 
 
@@ -64,5 +67,14 @@ async def get() -> List[ProcessStatus]:
     Get all the records from the process table and return it using the pydantic model ProcessStatus
     """
     ######################################## YOUR CODE HERE ##################################################
+    process_list = []
+    db = DB()
+    db_results = db.read_all() #returns a dict with all the elements
+
+    for row in db_results:
+        proc_item = ProcessStatus(process_id=row['process_id'], file_name=row['file_name'], file_path=row['file_path'], description=row['description'] , start_time=row['start_time'], end_time=row['end_time'], percentage=row['percentage'])
+        process_list.append(proc_item)
+
+    return process_list
 
     ######################################## YOUR CODE HERE ##################################################
