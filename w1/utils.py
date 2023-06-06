@@ -113,7 +113,7 @@ class DataReader:
         """
     ######################################## YOUR CODE HERE ##################################################
         for row in open(self._fp, 'r'):
-            row = [ x.strip() for x in row.split(sep)]
+            row = [ x.strip() for x in row.split(self._sep)]
 
             #dictionary comprehension
             datarow = { self._col_names[x]:row[x] for x in range(len(self._col_names))}
