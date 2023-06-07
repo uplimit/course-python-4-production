@@ -71,10 +71,14 @@ async def get() -> List[ProcessStatus]:
     db = DB()
     db_results = db.read_all() #returns a dict with all the elements
 
+    '''
     for row in db_results:
         proc_item = ProcessStatus(process_id=row['process_id'], file_name=row['file_name'], file_path=row['file_path'], description=row['description'] , start_time=row['start_time'], end_time=row['end_time'], percentage=row['percentage'])
         process_list.append(proc_item)
-
     return process_list
+    '''
+
+    #comprehension answer instead
+    return [ProcessStatus(**process) for process in db_results]
 
     ######################################## YOUR CODE HERE ##################################################
