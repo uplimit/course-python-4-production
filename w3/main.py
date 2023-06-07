@@ -62,7 +62,7 @@ def get_sales_information(file_path: str) -> Dict:
 
 # batches the files based on the number of processes
 def batch_files(file_paths: List[str], n_processes: int) -> List[set]:
-    if n_processes > len(file_paths):
+    if n_processes > len(file_paths): # if there are more processes than filepaths, then exit - 1 file per process
         return []
 
     n_per_batch = len(file_paths) // n_processes
@@ -164,14 +164,22 @@ def main() -> List[Dict]:
     batches = batch_files(file_paths=file_paths, n_processes=n_processes)
 
     ######################################## YOUR CODE HERE ##################################################
+    with multiprocessing.Pool(processes=n_processes) as pool:
+        params = []
+        for i in range(len(batches)):
+            params.append((batches[i],i))
 
+        results = pool.starmap(run, params)
+        pool.close()
+        pool.join()
     ######################################## YOUR CODE HERE ##################################################
 
     en = time.time()
     print("Overall time taken : {}".format(en-st))
 
     # should return revenue data
-    return [{}]
+    #return [{}]
+    return results
 
 
 if __name__ == '__main__':
