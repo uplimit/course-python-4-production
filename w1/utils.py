@@ -85,9 +85,9 @@ class Stats:
 
 class DataReader:
     def __init__(self, fp: str, sep: str, col_names: List) -> None:
-        self._fp = fp
-        self._sep = sep
-        self._col_names = col_names
+        self._fp = fp #filepath
+        self._sep = sep #delimiter?
+        self._col_names = col_names # column names
 
     def __iter__(self) -> Generator:
         """
@@ -112,7 +112,14 @@ class DataReader:
         }
         """
     ######################################## YOUR CODE HERE ##################################################
+        for row in open(self._fp, 'r'):
+            row = [ x.strip() for x in row.split(self._sep)]
 
+            #dictionary comprehension
+            datarow = { self._col_names[x]:row[x] for x in range(len(self._col_names))}
+            #for x in range(len(self._col_names)):
+            #    datarow[self._col_names[x]] = row[x]
+            yield datarow
     ######################################## YOUR CODE HERE ##################################################
 
     def get_file_path(self):
